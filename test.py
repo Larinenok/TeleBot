@@ -1,6 +1,6 @@
 import asyncio
 from random import randint
-from auth_data import bot_token, bot_id
+from auth_data import bot_token
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor

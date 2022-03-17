@@ -1,11 +1,11 @@
 from pathlib import Path
-from json_classes import QuestMessage, Variant
+from json_classes import QuestMessage, Answer
 
 
 def main():    
-    new_message = QuestMessage(image_path='', text='', variants=[])
-    variants = []
-    variant_id = 0
+    new_message = QuestMessage(image_path='', text='', Answers=[], id='')
+    Answers = []
+    answer = 0
 
     print('# Введите названия файла (id)')
     message_id = input()
@@ -14,21 +14,27 @@ def main():
     new_message.text = input()
 
     while True:
-        variant_id += 1
-        if (variant_id >= 5):
+        answer += 1
+        if (answer >= 5):
             break
 
-        print('# Начните вводить новый ответ или оставьте пустым для продолжения')
+        print('# Начните вводить новый ответ или оставьте пустым для продолжения:')
         user = input()
         if (user == ''):
             break
         else:
-            new_variant = Variant(id=variant_id, text='')
-            new_variant.text = user
-            variants.append(new_variant)
-    new_message.variants = variants
+            print('Введите id куда будет перемещать этот ответ:')
+            new_Answer = Answer(answer=answer, text='', id=input())
+            new_Answer.text = user
+            Answers.append(new_Answer)
+    
+    if (Answers == []):
+        print('Введите основной id перехода:')
+        new_message.id = input()
+    else:
+        new_message.Answers = Answers
 
-    print(new_message.json())
+    print(new_message.json(indent=2))
     print('# Сохранить? (Y/n)')
     user = input().lower()
     if (user == 'y' or user == ''):
@@ -36,5 +42,5 @@ def main():
         path.write_text(new_message.json(indent=2))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

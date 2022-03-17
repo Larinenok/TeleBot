@@ -1,0 +1,27 @@
+{
+  "image_path": "media/images/full_example.png",
+  "text": "osnovnoy tekst",
+  "Answers": [
+    {
+      "answer": "1",
+      "text": "otvet 1",
+      "id": "001"
+    },
+    {
+      "answer": "2",
+      "text": "otvet 2",
+      "id": "002"
+    },
+    {
+      "answer": "3",
+      "text": "otvet 3",
+      "id": "003"
+    },
+    {
+      "answer": "4",
+      "text": "otvet 4",
+      "id": "004"
+    }
+  ],
+  "id": ""
+}

@@ -1,12 +1,14 @@
 from pydantic import BaseModel
 
 
-class Variant(BaseModel):
-    id: int
+class Answer(BaseModel):
+    answer: str
     text: str
+    id: str
 
 
 class QuestMessage(BaseModel):
     image_path: str
     text: str
-    variants: list[Variant]
+    Answers: list[Answer]
+    id: str
