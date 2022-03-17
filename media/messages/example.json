@@ -1,0 +1,22 @@
+{
+  "image_path": "media/images/example.png",
+  "text": "\u043e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0442\u0435\u043a\u0441\u0442 | osnovnoy tekst",
+  "variants": [
+    {
+      "id": 1,
+      "text": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442 1 | variant 1"
+    },
+    {
+      "id": 2,
+      "text": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442 2 | variant 2"
+    },
+    {
+      "id": 3,
+      "text": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442 3 | variant 3"
+    },
+    {
+      "id": 4,
+      "text": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442 4 | variant 4"
+    }
+  ]
+}

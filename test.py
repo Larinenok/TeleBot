@@ -1,6 +1,6 @@
 import asyncio
 from random import randint
-from auth_data import bot_token
+from auth_data import bot_token, bot_id
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
@@ -58,6 +58,11 @@ async def yes_answer(message: types.Message):
 @dp.message_handler(lambda message: message.text == 'No')
 async def yes_answer(message: types.Message):
     await message.reply('...', reply_markup=types.ReplyKeyboardRemove())
+
+
+@dp.message_handler(commands=['photo'])
+async def send_photo(message: types.Message):
+    await bot.send_photo(chat_id=message.chat.id, photo=types.InputFile('photo.jpg'))
 
 
 ########################

@@ -1,0 +1,26 @@
+<Message ID>
+    <Image>media/id.jpg</Image>
+    <Text>текст</Text>
+    <Variants>
+        <Variant ID>
+            <Text>текст</Text>
+        <Variant ID>
+            <Text>текст</Text>
+
+{
+    "message":
+    {
+        "id": 1,
+        "image": "media/id.jpg",
+        "text": "текст",
+        "variants":
+        [{
+            "id": 1,
+            "text": "текст"
+        },
+        {
+            "id": 2,
+            "text": "текст"
+        }]
+    }
+}
