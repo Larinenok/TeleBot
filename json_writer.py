@@ -10,23 +10,27 @@ def main():
     print('# Введите названия файла (id)')
     message_id = input()
     new_message.image_path = 'media/images/' + message_id + '.png'
-    print('# Введите основной текст сообщения:')
-    new_message.text = input()
+    print('# Введите основной текст сообщения (можно использовать enter, чтобы закончить отправьте пустоту):')
+    new_message.text = input() + '\n'
+    while True:
+        user = input()
+        if (user == ''):
+            break
+        new_message.text += user + '\n'
 
     while True:
         answer += 1
         if (answer >= 5):
             break
-
+        
         print('# Начните вводить новый ответ или оставьте пустым для продолжения:')
         user = input()
         if (user == ''):
             break
-        else:
-            print('Введите id куда будет перемещать этот ответ:')
-            new_Answer = Answer(answer=answer, text='', id=input())
-            new_Answer.text = user
-            Answers.append(new_Answer)
+        user = str(answer) + ') ' + user
+        print('Введите id куда будет перемещать этот ответ:')
+        new_Answer = Answer(answer=answer, text=user, id=input())
+        Answers.append(new_Answer)
     
     if (Answers == []):
         print('Введите основной id перехода:')

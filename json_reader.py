@@ -9,11 +9,12 @@ def load_message_by_id(id: str):
 
 
 def main():
-    id = 'full_example'
+    id = 'example'
     path = Path('media/messages/' + id + '.json')
     quest_message = QuestMessage.parse_file(path)
     print(quest_message.json(indent=2))
     print(quest_message.text)
+    print(quest_message.image_path)
 
 
 if __name__ == '__main__':
