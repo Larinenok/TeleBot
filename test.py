@@ -62,7 +62,7 @@ async def yes_answer(message: types.Message):
 
 @dp.message_handler(commands=['photo'])
 async def send_photo(message: types.Message):
-    await bot.send_photo(chat_id=message.chat.id, photo=types.InputFile('photo.jpg'))
+    await bot.send_photo(chat_id=message.chat.id, photo=types.InputFile('media/images/full_example.jpg'))
 
 
 ########################
