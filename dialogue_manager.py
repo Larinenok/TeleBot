@@ -1,56 +1,107 @@
+from aiogram import Bot, Dispatcher, types
+from aiogram.enums import ParseMode
+from aiogram.client.default import DefaultBotProperties
+from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command
+from aiogram.filters.callback_data import CallbackData
+from aiogram.types import InputMediaPhoto, FSInputFile
 import asyncio
+
+# Инициализация бота
 from auth_data import bot_token
-from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher
-from aiogram.utils import executor
-from aiogram.utils.callback_data import CallbackData
-from json_reader import load_message_by_id
+from json_reader import load_message_by_id, get_quizes
 
 
-bot = Bot(bot_token, parse_mode=types.ParseMode.HTML)
-dp = Dispatcher(bot)
-callback_numbers = CallbackData('fabnum', 'action')
+# Создаем подкласс CallbackData
+class QuizCallbackData(CallbackData, prefix='action'):
+    action: str
+    is_init: bool
+
+bot = Bot(
+    token=bot_token,
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+)
+
+dp = Dispatcher()
+
 quest = {}
 
-
-async def view_message(message: types.Message, message_id: str):
-    quest_message = load_message_by_id(message_id)
-    varinats = ''
+async def choice_qiuz(message: Message):
+    quizes = get_quizes()
+    variants = ''
     buttons = []
-    quest[message.from_user.id] = quest_message
+
+    for i, name in enumerate(quizes):
+        variants += name + '\n'
+        buttons.append(
+            types.InlineKeyboardButton(
+                text=str(i + 1),
+                callback_data=QuizCallbackData(action=name, is_init=True).pack()
+            )
+        )
+
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=[buttons])
+
+    await bot.send_message(message.chat.id, text='Выберете quiz:')
+    await message.answer(variants, reply_markup=keyboard)
+
+async def view_message(message: Message, message_id: str):
+    quest_message = load_message_by_id(message_id)
+    variants = ''
+    buttons = []
+    quest[message.chat.id] = quest_message
+
     for i in quest_message.Answers:
-        varinats += i.text + '\n'
-        buttons.append(types.InlineKeyboardButton(text=i.answer, callback_data=callback_numbers.new(action=i.answer)))
-    keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(*buttons)
-    media = types.MediaGroup()
-    media.attach_photo(types.InputFile(quest_message.image_path), quest_message.text)
+        variants += i.text + '\n'
+        buttons.append(
+            types.InlineKeyboardButton(
+                text=i.answer,
+                callback_data=QuizCallbackData(action=i.answer, is_init=False).pack()
+            )
+        )
+    
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=[buttons])
+    
+    # Корректное создание объекта InputMediaPhoto
+    media = [InputMediaPhoto(media=FSInputFile(quest_message.image_path), caption=quest_message.text)]
+    
     await bot.send_media_group(chat_id=message.chat.id, media=media)
     await asyncio.sleep(2.0)
-    await message.answer(varinats, reply_markup=keyboard)
+    await message.answer(variants, reply_markup=keyboard)
 
 
-@dp.message_handler(commands='start')
-async def init_command(message: types.Message):
-    await view_message(message, 'example')       
+@dp.message(Command(commands=['start']))
+async def init_command(message: Message):
+    await choice_qiuz(message)
+    # await view_message(message, 'example')
 
 
-@dp.callback_query_handler(callback_numbers.filter(action=['1', '2', '3', '4']))
-async def move_to_message(call: types.CallbackQuery, callback_data: dict):
-    action = callback_data['action']
+@dp.callback_query(QuizCallbackData.filter())
+async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
+    action = callback_data.action
     quest_value = quest.get(call.from_user.id)
     variants = ''
-    for i in quest_value.Answers:
-        if (i.answer == action):
-            answer_id = i.id
-            variants += '<b>' + i.text + '</b>' + '\n'
-        else:
-            variants += i.text + '\n'
+    answer_id = None
 
-    await call.message.edit_text(variants, reply_markup=None)
+    if quest_value and not callback_data.is_init:
+        for i in quest_value.Answers:
+            if i.answer == action:
+                answer_id = i.id
+                variants += f'<b>{i.text}</b>\n'
+            else:
+                variants += f'{i.text}\n'
+    else:
+        for name in get_quizes():
+            if  name == action:
+                answer_id = action
+                variants += f'<b>{name}</b>\n'
+            else:
+                variants += f'{name}\n'
+
+    await call.message.edit_text(variants)
     await view_message(call.message, answer_id)
     await call.answer()
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    dp.run_polling(bot)

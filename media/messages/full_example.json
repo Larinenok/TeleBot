@@ -4,13 +4,13 @@
   "Answers": [
     {
       "answer": "1",
-      "text": "1) \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 ASCII",
-      "id": "example"
+      "text": "1) \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 \u043a\u0440\u0443\u0433\u0438",
+      "id": "full_example"
     },
     {
       "answer": "2",
-      "text": "2) \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 \u043a\u0440\u0443\u0433\u0438",
-      "id": "full_example"
+      "text": "2) \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 ASCII",
+      "id": "example"
     }
   ],
   "id": ""
