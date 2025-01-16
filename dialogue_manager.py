@@ -69,6 +69,9 @@ async def view_message(message: Message, message_id: str):
     await asyncio.sleep(2.0)
     await message.answer(variants, reply_markup=keyboard)
 
+async def stop_message(message: Message):
+    await bot.send_message(message.chat.id, 'Вы прошли данную викторину!\nВот ваши результаты:\nПравильные ответы: 4 из 5')
+
 
 @dp.message(Command(commands=['start']))
 async def init_command(message: Message):
@@ -99,7 +102,10 @@ async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
                 variants += f'{name}\n'
 
     await call.message.edit_text(variants)
-    await view_message(call.message, answer_id)
+    if answer_id == 'exit':
+        await stop_message(call.message)
+    else:
+        await view_message(call.message, answer_id)
     await call.answer()
 
 

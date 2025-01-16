@@ -29,7 +29,7 @@ def main():
             break
         user = str(answer) + ') ' + user
         print('Введите id куда будет перемещать этот ответ:')
-        new_Answer = Answer(answer=answer, text=user, id=input())
+        new_Answer = Answer(answer=str(answer), text=user, id=input())
         Answers.append(new_Answer)
     
     if (Answers == []):
@@ -38,12 +38,12 @@ def main():
     else:
         new_message.Answers = Answers
 
-    print(new_message.json(indent=2))
+    print(new_message.model_dump_json(indent=2))
     print('# Сохранить? (Y/n)')
     user = input().lower()
     if (user == 'y' or user == ''):
         path = Path('media/messages/' + message_id + '.json')
-        path.write_text(new_message.json(indent=2))
+        path.write_text(new_message.model_dump_json(indent=2), encoding='utf-8')
 
 
 if __name__ == '__main__':

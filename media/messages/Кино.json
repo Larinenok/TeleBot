@@ -1,0 +1,22 @@
+{
+  "image_path": "media/images/Кино.png",
+  "text": "Какой из следующих языков программирования является компилируемым?\n",
+  "Answers": [
+    {
+      "answer": "1",
+      "text": "1) Python",
+      "id": "Города"
+    },
+    {
+      "answer": "2",
+      "text": "2) Java",
+      "id": "Города"
+    },
+    {
+      "answer": "3",
+      "text": "3) JavaScript",
+      "id": "Города"
+    }
+  ],
+  "id": ""
+}
