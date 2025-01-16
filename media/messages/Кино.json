@@ -5,17 +5,20 @@
     {
       "answer": "1",
       "text": "1) Python",
-      "id": "Города"
+      "id": "Города",
+      "is_true": false
     },
     {
       "answer": "2",
       "text": "2) Java",
-      "id": "Города"
+      "id": "Города",
+      "is_true": true
     },
     {
       "answer": "3",
       "text": "3) JavaScript",
-      "id": "Города"
+      "id": "Города",
+      "is_true": false
     }
   ],
   "id": ""

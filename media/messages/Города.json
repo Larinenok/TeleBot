@@ -5,17 +5,20 @@
     {
       "answer": "1",
       "text": "1) Присваивает значение переменной.",
-      "id": "exit"
+      "id": "exit",
+      "is_true": false
     },
     {
       "answer": "2",
       "text": "2) Сравнивает два значения на равенство.",
-      "id": "exit"
+      "id": "exit",
+      "is_true": true
     },
     {
       "answer": "3",
       "text": "3) Выполняет арифметическое сложение.",
-      "id": "exit"
+      "id": "exit",
+      "is_true": false
     }
   ],
   "id": ""

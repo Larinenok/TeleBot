@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, BotCommand
 from aiogram.filters import Command
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InputMediaPhoto, FSInputFile
@@ -72,6 +72,14 @@ async def view_message(message: Message, message_id: str):
 async def stop_message(message: Message):
     await bot.send_message(message.chat.id, 'Вы прошли данную викторину!\nВот ваши результаты:\nПравильные ответы: 4 из 5')
 
+async def set_commands():
+    commands = [
+        BotCommand(command="/start", description="Запуск бота"),
+        BotCommand(command="/help", description="Получить помощь"),
+        BotCommand(command="/info", description="Информация о боте"),
+    ]
+    await bot.set_my_commands(commands)
+
 
 @dp.message(Command(commands=['start']))
 async def init_command(message: Message):
@@ -90,7 +98,10 @@ async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
         for i in quest_value.Answers:
             if i.answer == action:
                 answer_id = i.id
-                variants += f'<b>{i.text}</b> ✅\n'
+                if i.is_true:
+                    variants += f'<b>{i.text}</b> ✅\n'
+                else:
+                    variants += f'<b>{i.text}</b> ❌\n'
             else:
                 variants += f'{i.text}\n'
     else:
@@ -108,6 +119,19 @@ async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
         await view_message(call.message, answer_id)
     await call.answer()
 
+@dp.message(Command("help"))
+async def send_help(message: types.Message):
+    await message.reply("Я могу помочь с определенными командами. Используйте /start, /help, и /info.")
+
+@dp.message(Command("info"))
+async def send_info(message: types.Message):
+    await message.reply("Этот бот был создан для создания и прохождения викторин.")
+
+# Функция для запуска бота
+async def on_start():
+    await set_commands()
+
 
 if __name__ == '__main__':
+    dp.startup.register(on_start)
     dp.run_polling(bot)

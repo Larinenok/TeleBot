@@ -5,6 +5,7 @@ class Answer(BaseModel):
     answer: str
     text: str
     id: str
+    is_true: bool
 
 
 class QuestMessage(BaseModel):
