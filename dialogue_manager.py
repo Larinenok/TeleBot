@@ -90,7 +90,7 @@ async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
         for i in quest_value.Answers:
             if i.answer == action:
                 answer_id = i.id
-                variants += f'<b>{i.text}</b>\n'
+                variants += f'<b>{i.text}</b> ✅\n'
             else:
                 variants += f'{i.text}\n'
     else:
