@@ -1,0 +1,32 @@
+{
+  "image_path": "media/images/kino1.jpg",
+  "text": "Какой фильм получил премию «Оскар» за лучший фильм в 1994 году?\n",
+  "Answers": [
+    {
+      "answer": "1",
+      "text": "1) «Форрест Гамп».",
+      "id": "kino2",
+      "is_true": true
+    },
+    {
+      "answer": "2",
+      "text": "2) «Криминальное чтиво».",
+      "id": "kino2",
+      "is_true": false
+    },
+    {
+      "answer": "3",
+      "text": "3) «Побег из Шоушенка».",
+      "id": "kino2",
+      "is_true": false
+    },
+    {
+      "answer": "4",
+      "text": "4) «Список Шиндлера».",
+      "id": "kino2",
+      "is_true": false
+    }
+  ],
+  "id": "Кино",
+  "total_questions": 3
+}

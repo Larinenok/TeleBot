@@ -1,25 +1,26 @@
 {
-  "image_path": "media/images/Кино.png",
+  "image_path": "media/images/prog2.png",
   "text": "Какой из следующих языков программирования является компилируемым?\n",
   "Answers": [
     {
       "answer": "1",
       "text": "1) Python",
-      "id": "Города",
+      "id": "prog3",
       "is_true": false
     },
     {
       "answer": "2",
       "text": "2) Java",
-      "id": "Города",
+      "id": "prog3",
       "is_true": true
     },
     {
       "answer": "3",
       "text": "3) JavaScript",
-      "id": "Города",
+      "id": "prog3",
       "is_true": false
     }
   ],
-  "id": ""
+  "id": "Программирование",
+  "total_questions": 3
 }

@@ -1,0 +1,32 @@
+{
+  "image_path": "media/images/kino2.jpg",
+  "text": "Как зовут актера, сыгравшего Джека Доусона в фильме «Титаник»?\n",
+  "Answers": [
+    {
+      "answer": "1",
+      "text": "1) Брэд Питт.",
+      "id": "kino3",
+      "is_true": false
+    },
+    {
+      "answer": "2",
+      "text": "2) Леонардо ДиКаприо.",
+      "id": "kino3",
+      "is_true": true
+    },
+    {
+      "answer": "3",
+      "text": "3) Мэтт Деймон.",
+      "id": "kino3",
+      "is_true": false
+    },
+    {
+      "answer": "4",
+      "text": "4) Кристиан Бейл.",
+      "id": "kino3",
+      "is_true": false
+    }
+  ],
+  "id": "Кино",
+  "total_questions": 3
+}

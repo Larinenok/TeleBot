@@ -13,3 +13,4 @@ class QuestMessage(BaseModel):
     text: str
     Answers: list[Answer]
     id: str
+    total_questions: int

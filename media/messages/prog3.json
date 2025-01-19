@@ -1,25 +1,26 @@
 {
-  "image_path": "media/images/Города.jpg",
+  "image_path": "media/images/prog3.jpg",
   "text": "Что делает оператор == в языке программирования Python?\n",
   "Answers": [
     {
       "answer": "1",
       "text": "1) Присваивает значение переменной.",
-      "id": "exit",
+      "id": "prog4",
       "is_true": false
     },
     {
       "answer": "2",
       "text": "2) Сравнивает два значения на равенство.",
-      "id": "exit",
+      "id": "prog4",
       "is_true": true
     },
     {
       "answer": "3",
       "text": "3) Выполняет арифметическое сложение.",
-      "id": "exit",
+      "id": "prog4",
       "is_true": false
     }
   ],
-  "id": ""
+  "id": "Программирование",
+  "total_questions": 5
 }

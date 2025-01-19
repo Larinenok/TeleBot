@@ -1,3 +1,4 @@
+from datetime import datetime
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
@@ -9,7 +10,8 @@ import asyncio
 
 # Инициализация бота
 from auth_data import bot_token
-from json_reader import load_message_by_id, get_quizes
+from json_reader import load_message_by_id, get_quizes, load_quize_by_id
+from db_utils import add_user, add_quiz_result, get_user_quiz_results
 
 
 # Создаем подкласс CallbackData
@@ -49,7 +51,7 @@ async def view_message(message: Message, message_id: str):
     quest_message = load_message_by_id(message_id)
     variants = ''
     buttons = []
-    quest[message.chat.id] = quest_message
+    quest[message.chat.id] = [quest_message, quest[message.chat.id][1]]
 
     for i in quest_message.Answers:
         variants += i.text + '\n'
@@ -69,22 +71,8 @@ async def view_message(message: Message, message_id: str):
     await asyncio.sleep(2.0)
     await message.answer(variants, reply_markup=keyboard)
 
-async def stop_message(message: Message):
-    await bot.send_message(message.chat.id, 'Вы прошли данную викторину!\nВот ваши результаты:\nПравильные ответы: 4 из 5')
-
-async def set_commands():
-    commands = [
-        BotCommand(command="/start", description="Запуск бота"),
-        BotCommand(command="/help", description="Получить помощь"),
-        BotCommand(command="/info", description="Информация о боте"),
-    ]
-    await bot.set_my_commands(commands)
-
-
-@dp.message(Command(commands=['start']))
-async def init_command(message: Message):
-    await choice_qiuz(message)
-    # await view_message(message, 'example')
+async def stop_message(message: Message, correct_answers, total_questions):
+    await bot.send_message(message.chat.id, f'Вы прошли данную викторину!\nВот ваши результаты:\nПравильные ответы: {correct_answers} из {total_questions}')
 
 
 @dp.callback_query(QuizCallbackData.filter())
@@ -95,11 +83,12 @@ async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
     answer_id = None
 
     if quest_value and not callback_data.is_init:
-        for i in quest_value.Answers:
+        for i in quest_value[0].Answers:
             if i.answer == action:
                 answer_id = i.id
                 if i.is_true:
                     variants += f'<b>{i.text}</b> ✅\n'
+                    quest_value[1] += 1
                 else:
                     variants += f'<b>{i.text}</b> ❌\n'
             else:
@@ -107,29 +96,70 @@ async def move_to_message(call: CallbackQuery, callback_data: QuizCallbackData):
     else:
         for name in get_quizes():
             if  name == action:
-                answer_id = action
+                answer_id = load_quize_by_id(name).id
                 variants += f'<b>{name}</b>\n'
             else:
                 variants += f'{name}\n'
 
     await call.message.edit_text(variants)
     if answer_id == 'exit':
-        await stop_message(call.message)
+        add_quiz_result(
+            quiz_name=quest_value[0].id,
+            user_id=call.from_user.id,
+            correct_answers=quest_value[1],
+            total_questions=quest_value[0].total_questions,
+        )
+
+        await stop_message(call.message, quest_value[1], quest_value[0].total_questions)
     else:
         await view_message(call.message, answer_id)
     await call.answer()
 
 @dp.message(Command("help"))
 async def send_help(message: types.Message):
-    await message.reply("Я могу помочь с определенными командами. Используйте /start, /help, и /info.")
+    await message.reply("Я могу помочь с определенными командами. Используйте /start, /stats и /info.")
 
 @dp.message(Command("info"))
 async def send_info(message: types.Message):
     await message.reply("Этот бот был создан для создания и прохождения викторин.")
 
-# Функция для запуска бота
+@dp.message(Command("stats"))
+async def send_stats(message: types.Message):
+    results = get_user_quiz_results(user_id=message.from_user.id)
+    if not results:
+        await message.answer("Вы пока не участвовали в викторинах.")
+        return
+
+    response = "Ваши результаты викторин:\n\n"
+    for result in results:
+        date_obj = datetime.fromisoformat(result[3])
+        date = date_obj.strftime('%d-%m-%Y %H:%M')
+        response += (
+            f"Викторина: {result[0]}\n"
+            f"Правильные ответы: {result[1]}/{result[2]}\n"
+            f"Дата: {date}\n\n"
+        )
+    await message.answer(response)
+
+@dp.message(Command(commands=['start']))
+async def init_command(message: Message):
+    add_user(
+        user_id=message.from_user.id,
+        username=message.from_user.username,
+        first_name=message.from_user.first_name,
+        last_name=message.from_user.last_name,
+    )
+    quest[message.chat.id] = [None, 0]
+    await choice_qiuz(message)
+
 async def on_start():
-    await set_commands()
+    commands = [
+        BotCommand(command="/start", description="Запуск бота"),
+        BotCommand(command="/help", description="Получить помощь"),
+        BotCommand(command="/info", description="Информация о боте"),
+        BotCommand(command="/stats", description="Информация о результатах викторин"),
+    ]
+    await bot.set_my_commands(commands)
 
 
 if __name__ == '__main__':

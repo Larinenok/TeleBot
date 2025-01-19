@@ -7,8 +7,13 @@ def load_message_by_id(id: str):
     quest_message = QuestMessage.parse_file(path)
     return quest_message
 
+def load_quize_by_id(id: str):
+    path = Path('media/quizes/' + id + '.json')
+    quest_message = QuestMessage.parse_file(path)
+    return quest_message
+
 def get_quizes() -> list:
-    path = Path('media/messages')
+    path = Path('media/quizes')
     files = [f.name.replace('.json', '') for f in path.iterdir() if f.is_file()]
 
     return files
